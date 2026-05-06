@@ -1,14 +1,21 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 function DetailPage() {
   const { barcode } = useParams();
+  const navigate = useNavigate();
   const [product, setProduct] = useState(null);
 
   useEffect(() => {
-    fetch(`https://world.openfoodfacts.org/api/v0/product/${barcode}.json`)
-      .then(res => res.json())
-      .then(data => setProduct(data.product));
+    const fetchProduct = async () => {
+      const res = await fetch(
+        `https://world.openfoodfacts.org/api/v0/product/${barcode}.json`
+      );
+      const data = await res.json();
+      setProduct(data.product);
+    };
+
+    fetchProduct();
   }, [barcode]);
 
   if (!product) return <p>Loading...</p>;
@@ -16,8 +23,10 @@ function DetailPage() {
   return (
     <div>
       <h2>{product.product_name}</h2>
-      <img src={product.image_front_url} width="200" />
       <p>Brand: {product.brands}</p>
+      <p>Category: {product.categories}</p>
+
+      <button onClick={() => navigate(-1)}>⬅ Back</button>
     </div>
   );
 }

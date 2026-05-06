@@ -11,9 +11,10 @@ function SearchBar({ onSearch }) {
   return (
     <form onSubmit={handleSubmit}>
       <input
+        type="text"
+        placeholder="Search food..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        placeholder="Search food..."
       />
       <button type="submit">Search</button>
     </form>
